@@ -5,7 +5,7 @@ import SubNavbar from '../Components/SubNavBar';
 import JobCard from '../Components/JobCard';
 import { db } from '../Components/Firebase'; // adjust path as needed
 import { collection, getDocs } from 'firebase/firestore';
-
+import Footer from '../Components/Footer';
 
 // useEffect(() => {
 //   const fetchJobs = async () => {
@@ -112,6 +112,7 @@ export default function HomePage() {
           ))
         )}
       </div>
+      <Footer />
     </div>
   );
 }

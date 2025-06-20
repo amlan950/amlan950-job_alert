@@ -17,6 +17,7 @@ export default function Navbar() {
       <div>
         <Link href="/" style={styles.link}>Home</Link>
               <a href="/AdminPage" style={styles.link}>Admin Page</a>
+        <Link href="/Information" style={styles.link}>Information</Link>
 
       </div>
     </nav>
