@@ -3,7 +3,7 @@ import { useState ,useEffect} from 'react';
 import Navbar from '../Components/NavBar';
 import SubNavbar from '../Components/SubNavBar';
 import JobCard from '../Components/JobCard';
-import { db } from '../Components/firebase'; // adjust path as needed
+import { db } from '../Components/Firebase'; // adjust path as needed
 import { collection, getDocs } from 'firebase/firestore';
 
 
