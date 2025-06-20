@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from "react";
-import { db } from "../firebase"; // ✅ Adjust path if needed
+import { db } from "../Firebase"; // ✅ Adjust path if needed
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import JobCard from "../Components/JobCard";
 
