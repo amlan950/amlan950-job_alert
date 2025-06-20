@@ -1,13 +1,8 @@
-
-
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { Context } from '../context/Contexxt';
 import { useState, useEffect } from "react";
+import { db } from "../firebase"; // ✅ Adjust path if needed
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import JobCard from "../Components/JobCard";
-
-
-// const { jobs, addJob } = useContext(Context);
 
 export default function AdminPage() {
   const [jobs, setJobs] = useState([]);
@@ -19,26 +14,40 @@ export default function AdminPage() {
     link: "",
     type: "govt",
   });
-  const router = useRouter(); // ✅ define router
 
+  const router = useRouter();
+
+  // ✅ Fetch jobs from Firestore
   useEffect(() => {
-    const stored = localStorage.getItem("jobList");
-    if (stored) setJobs(JSON.parse(stored));
+    const fetchJobs = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "jobs"));
+        const jobsFromFirebase = querySnapshot.docs.map(doc => doc.data());
+        setJobs(jobsFromFirebase);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    fetchJobs();
   }, []);
 
+  // ✅ Handle form input
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  const updatedJobs = [...jobs, form];
-  setJobs(updatedJobs);
-  localStorage.setItem("jobList", JSON.stringify(updatedJobs));
+  // ✅ Submit job to Firestore
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "jobs"), form);
+      router.push('/');
+    } catch (error) {
+      console.error("Error adding job:", error);
+    }
 
-  // ✅ Redirect to homepage
-  router.push('/');
-    // Reset form
+    // Clear form
     setForm({
       title: "",
       company: "",
