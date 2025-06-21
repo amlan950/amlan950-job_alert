@@ -6,6 +6,7 @@ import JobCard from '../Components/JobCard';
 import { db } from '../Components/Firebase'; // adjust path as needed
 import { collection, getDocs } from 'firebase/firestore';
 import Footer from '../Components/Footer';
+import CarouselBanner from '../Components/CarouselBanner';
 
 // useEffect(() => {
 //   const fetchJobs = async () => {
@@ -102,8 +103,10 @@ export default function HomePage() {
   return (
     <div>
       <Navbar />
+      
       <SubNavbar onFilter={setFilter} notifications={notifications} />
-      <div style={{ padding: "1rem" }}>
+      <CarouselBanner />
+      <div style={styles.grid}>
         {filteredJobs.length === 0 ? (
           <p>No jobs found.</p>
         ) : (
@@ -112,7 +115,17 @@ export default function HomePage() {
           ))
         )}
       </div>
+      
       <Footer />
     </div>
   );
 }
+const styles = {
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+    gap: "1.5rem",
+    padding: "1rem",
+  },
+};
+
