@@ -1,140 +1,4 @@
-// components/Navbar.js
-// import Image from 'next/image';
-// import Link from 'next/link';
 
-// export default function Navbar() {
-//   return (
-//     <nav style={styles.nav}>
-//        {/* ✅ Replace text with image */}
-//       <Link href="/" style={styles.logo}>
-//         <Image 
-//           src="/logo.png" // ✅ Put your image in /public/logo.png
-//           alt="Job Alert Logo" 
-//           width={40} 
-//           height={40} 
-//         />
-//       </Link>
-//       <div>
-//         <Link href="/" style={styles.link}>Home</Link>
-//               <a href="/AdminPage" style={styles.link}>Admin Page</a>
-//         <Link href="/Information" style={styles.link}>Information</Link>
-//         <Link href="/Signup" style={styles.link}>Signup</Link>
-//         <Link href="/Login" style={styles.link}>Login</Link>
-
-//       </div>
-//     </nav>
-//   );
-// }
-
-// const styles = {
-//   nav: {
-//     display: "flex",
-//     justifyContent: "space-between",
-//     padding: "1rem 2rem",
-//     backgroundColor: "#333",
-//     color: "#fff",
-//     alignItems: "center",
-//   },
-//   logo: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     textDecoration: 'none',
-//   },
-//   link: {
-//     marginLeft: "1rem",
-//     color: "#fff",
-//     textDecoration: "none",
-//   },
-//     text: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//     marginLeft: '0.5rem',
-//     fontSize: '1.2rem',
-//   },
-// };
-
-
-// import Image from 'next/image';
-// import Link from 'next/link';
-
-// export default function Navbar() {
-//   return (
-//     <nav style={styles.nav}>
-//       {/* ✅ Logo with image */}
-//       <Link href="/" style={styles.logo}>
-//         <Image 
-//           src="/logo.png" 
-//           alt="Job Alert Logo" 
-//           width={40} 
-//           height={40} 
-//         />
-//         <span style={styles.text}>Job Alert</span>
-//       </Link>
-
-//       <div style={styles.right}>
-//         <Link href="/" style={styles.link}>Home</Link>
-//         <a href="/AdminPage" style={styles.link}>Admin Page</a>
-//         <Link href="/Information" style={styles.link}>Information</Link>
-
-//         {/* ✅ Styled buttons */}
-//         <Link href="/Signup" style={styles.signupButton}>Signup</Link>
-//         <Link href="/Login" style={styles.loginButton}>Login</Link>
-//       </div>
-//     </nav>
-//   );
-// }
-
-// const styles = {
-//   nav: {
-//     display: "flex",
-//     justifyContent: "space-between",
-//     padding: "1rem 2rem",
-//     backgroundColor: "#333",
-//     color: "#fff",
-//     alignItems: "center",
-//   },
-//   logo: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     textDecoration: 'none',
-//   },
-//   text: {
-//     color: 'white',
-//     fontWeight: 'bold',
-//     marginLeft: '0.5rem',
-//     fontSize: '1.2rem',
-//   },
-//   right: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     gap: '1rem',
-//   },
-//   link: {
-//     color: "#fff",
-//     textDecoration: "none",
-//     fontSize: "1rem",
-//   },
-//   loginButton: {
-//     padding: "0.4rem 1rem",
-//     backgroundColor: "#0070f3",
-//     color: "#fff",
-//     borderRadius: "8px",
-//     fontWeight: "bold",
-//     textDecoration: "none",
-//     transition: "0.3s",
-//   },
-//   signupButton: {
-//     padding: "0.4rem 1rem",
-//     backgroundColor: "#22c55e", // green
-//     color: "#fff",
-//     borderRadius: "8px",
-//     fontWeight: "bold",
-//     textDecoration: "none",
-//     transition: "0.3s",
-//   },
-// };
-
-// Components/Navbar.js
 
 import Link from "next/link";
 import Image from "next/image";
@@ -148,18 +12,33 @@ export default function Navbar() {
   const router = useRouter();
 
   // ✅ Track logged-in user
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    console.log("User:", user); // ✅ shows user object or null
+    setUser(user); // save to state
+  });
+  return () => unsubscribe();
+}, []);
 
   const handleLogout = async () => {
     await signOut(auth);
     setUser(null);
     router.push("/Login");
   };
+  const handleAlumniAccess = () => {
+  if (!user) {
+    // First-time visitor ➜ redirect to Signup
+    if (!localStorage.getItem("alumniAccessed")) {
+      localStorage.setItem("alumniAccessed", "true");
+      router.push("/SignupAlumni");
+    } else {
+      router.push("/LoginAlumni");
+    }
+  } else {
+    router.push("/Alumni");
+  }
+};
+
 
   return (
     <nav style={styles.nav}>
@@ -176,6 +55,7 @@ export default function Navbar() {
         <Link href="/" style={styles.link}>Home</Link>
         <Link href="/Information" style={styles.link}>Info</Link>
         <Link href="/AdminPage" style={styles.link}>Admin</Link>
+
 
         {user ? (
           <>
